@@ -1,0 +1,30 @@
+name: Blazor Docker CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.LOCAL_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.LOCAL_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to local machine via SSH
+        run: |
+          ssh ${{ secrets.LOCAL_USER }}@${{ secrets.LOCAL_HOST }} << 'EOF'
+            cd D:/Project/FC/FootBallWeb/FootBallWeb
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
+          EOF

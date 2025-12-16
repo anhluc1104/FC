@@ -10,24 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup SSH
-        shell: bash
+      - name: Install Tailscale
         run: |
-          set -e
-          echo "Using HOME=/home/runner"
+          curl -fsSL https://tailscale.com/install.sh | sh
+
+      - name: Connect to Tailscale
+        run: |
+          sudo tailscale up --authkey=${{ secrets.TAILSCALE_AUTHKEY }} --ssh
+
+      - name: Setup SSH
+        run: |
           mkdir -p /home/runner/.ssh
           echo "${{ secrets.LOCAL_SSH_KEY }}" > /home/runner/.ssh/id_ed25519
           chmod 600 /home/runner/.ssh/id_ed25519
-          ssh-keyscan -H "${{ secrets.LOCAL_HOST }}" >> /home/runner/.ssh/known_hosts
 
-      - name: Deploy to local machine via SSH
+      - name: Deploy to local machine
         run: |
-          ssh ${{ secrets.LOCAL_USER }}@${{ secrets.LOCAL_HOST }} << 'EOF'
-            cd D:/Project/FC/FootBallWeb/FootBallWeb
-            git pull origin main
-            docker compose down
-            docker compose up -d --build
-          EOF
+          ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.LOCAL_USER }}@${{ secrets.LOCAL_HOST }} << 'EOF'
+              cd D:/Project/FC/FootBallWeb/FootBallWeb
+              git pull origin main
+              docker compose down
+              docker compose up -d --build
+            EOF

@@ -16,7 +16,8 @@ jobs:
       - name: Setup SSH
         shell: bash
         run: |
-          echo "HOME=$HOME"
+          set -e
+          echo "Using HOME=/home/runner"
           mkdir -p /home/runner/.ssh
           echo "${{ secrets.LOCAL_SSH_KEY }}" > /home/runner/.ssh/id_ed25519
           chmod 600 /home/runner/.ssh/id_ed25519

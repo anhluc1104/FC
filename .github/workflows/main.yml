@@ -13,21 +13,19 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.LOCAL_SSH_KEY }}
-          known_hosts: unnecessary # Ta sẽ dùng tham số -o StrictHostKeyChecking=no nếu host thay đổi
-          if_key_exists: replace
-
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.LOCAL_HOST }} >> ~/.ssh/known_hosts
+      - name: Setup SSH
+        shell: bash
+        run: |
+          echo "HOME=$HOME"
+          mkdir -p /home/runner/.ssh
+          echo "${{ secrets.LOCAL_SSH_KEY }}" > /home/runner/.ssh/id_ed25519
+          chmod 600 /home/runner/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.LOCAL_HOST }}" >> /home/runner/.ssh/known_hosts
 
       - name: Deploy to local machine via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.LOCAL_USER }}@${{ secrets.LOCAL_HOST }} << 'EOF'
-            # Lưu ý: Nếu là Windows, dùng đường dẫn chuẩn Windows
-            cd "D:/Project/FC/FootBallWeb/FootBallWeb"
+          ssh ${{ secrets.LOCAL_USER }}@${{ secrets.LOCAL_HOST }} << 'EOF'
+            cd D:/Project/FC/FootBallWeb/FootBallWeb
             git pull origin main
             docker compose down
             docker compose up -d --build

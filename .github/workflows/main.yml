@@ -14,11 +14,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup SSH
+        shell: bash
         run: |
-          mkdir -p "$HOME/.ssh"
-          echo "${{ secrets.LOCAL_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.LOCAL_HOST }} >> ~/.ssh/known_hosts
+          echo "HOME=$HOME"
+          mkdir -p /home/runner/.ssh
+          echo "${{ secrets.LOCAL_SSH_KEY }}" > /home/runner/.ssh/id_ed25519
+          chmod 600 /home/runner/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.LOCAL_HOST }}" >> /home/runner/.ssh/known_hosts
 
       - name: Deploy to local machine via SSH
         run: |

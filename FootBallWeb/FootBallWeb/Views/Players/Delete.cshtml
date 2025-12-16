@@ -1,0 +1,15 @@
+﻿@model FootBallWeb.Models.Player
+
+<h2>Bạn có chắc chắn muốn xoá?</h2>
+
+<div>
+    <h4>@Model.Name (@Model.Position)</h4>
+    <p>Quốc tịch: @Model.Nationality</p>
+    <p>Đội bóng: @Model.Team?.Name</p>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="PlayerId" />
+        <button type="submit" class="btn btn-danger">Xoá</button>
+        <a asp-action="Index" class="btn btn-secondary">Huỷ</a>
+    </form>
+</div>

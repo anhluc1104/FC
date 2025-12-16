@@ -1,0 +1,22 @@
+[
+  {
+    "ContainingType": "FootBallWeb.Controllers.PlayersApiController",
+    "Method": "GetAllPlayers",
+    "RelativePath": "api/PlayersApi",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FootBallWeb.Controllers.PlayersApiController",
+    "Method": "Index",
+    "RelativePath": "api/PlayersApi",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

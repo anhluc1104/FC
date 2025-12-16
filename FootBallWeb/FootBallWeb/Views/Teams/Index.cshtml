@@ -1,0 +1,39 @@
+﻿@model IEnumerable<FootBallWeb.Models.Team>
+
+<h2>Danh sách câu lạc bộ</h2>
+
+<a class="btn btn-primary" asp-controller="Teams" asp-action="Create">Thêm câu lạc bộ</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Quốc gia</th>
+            <th>Thành phố</th>
+            <th>Sân vận động</th>
+            <th>Ảnh</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Name</td>
+                <td>@p.Country</td>
+                <td>@p.city</td>
+                <td>@p.stadium</td>
+                <td>
+                    <img src="@p.LogoUrl" width="50" />
+                </td>
+                <td>
+                    <a class="btn btn-info" asp-controller="Teams" asp-action="Create" asp-route-id="@p.TeamId">Cập nhật</a>
+                </td>
+                <td>
+                    <a class="btn btn-danger" asp-controller="Teams" asp-action="Delete" asp-route-id="@p.TeamId">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

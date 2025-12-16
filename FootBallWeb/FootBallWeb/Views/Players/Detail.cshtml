@@ -1,0 +1,58 @@
+﻿@model FootBallWeb.Models.Player
+@{
+    ViewBag.Title = "Chi tiết cầu thủ";
+    var histories = ViewBag.PlayerTeamHistory as List<FootBallWeb.Models.PlayerTeamHistory>;
+}
+
+<h2>Thêm cầu thủ</h2>
+<input type="hidden" asp-for="PlayerId" />
+<div>
+    <img src="@Model.PhotoUrl" alt="Ảnh cầu thủ" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+</div>
+<dl>
+    <dt>Tên</dt>
+    <dd>@Model.Name</dd>
+    <dt>Vị trí</dt>
+    <dd>@Model.Position</dd>
+    <dt>Tuổi</dt>
+    <dd>@Model.Age</dd>
+    <dt>Quốc tịch</dt>
+    <dd>@Model.Nationality</dd>
+</dl>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Tên CLB</th>
+            <th>Thời gian bắt đầu</th>
+            <th>Thời gian kết thúc</th>
+            <th>Vị trí</th>
+            <th>Số áo</th>
+            <th>Số trận</th>
+            <th>Bàn thắng/ Kiến tạo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var h in histories)
+        {
+            <tr>
+                <td>@h.Team.Name</td>
+                <td>@h.StartDate.ToString("yyyy/MM")</td>
+                <td>@h.EndDate.ToString("yyyy/MM")</td>
+                <td>@h.Position</td>
+                <td>
+                    @h.ShirtNumber
+                </td>
+                <td>
+                    @h.Appearances
+                </td>
+                <td>
+                    @($"{h.Goals} G / {h.Assists} A")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a class="btn btn-info" asp-controller="Players" asp-action="Edit" asp-route-id="@Model.TeamId">Cập nhật</a>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Quay lại</a>
+</div>

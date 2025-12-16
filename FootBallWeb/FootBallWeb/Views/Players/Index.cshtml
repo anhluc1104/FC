@@ -1,0 +1,55 @@
+﻿@* @model IEnumerable<FootBallWeb.Models.Player> *@
+@model FootBallWeb.Views.Players.IndexModel
+
+<h2>Danh sách cầu thủ</h2>
+
+<a class="btn btn-primary" asp-controller="Players" asp-action="Create">Thêm cầu thủ</a>
+
+<hr />
+@* <form asp-action="Search" method="post">
+    <input type="text" name="keyword" placeholder="Nhập quốc tịch" />
+    <button type="submit">Tìm kiếm</button>
+</form> *@
+
+<form method="post">
+    <input type="text" name="SearchKeyword" value="@Model.SearchKeyword" placeholder="Nhập quốc tịch..." />
+    <button type="submit">Tìm kiếm</button>
+</form>
+
+<hr />
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Vị trí</th>
+            @* <th>Ngày sinh</th> *@
+            <th>Tuổi</th>
+            <th>Đội bóng</th>
+            <th>Quốc tịch</th>
+            <th>Ảnh</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Players)
+        {
+            <tr >
+                <td onclick="window.location.href='@Url.Action("Detail", "Players", new { id = @p.PlayerId })'" style="cursor: pointer;">@p.Name</td>
+                <td onclick="window.location.href='@Url.Action("Detail", "Players", new { id = @p.PlayerId })'" style="cursor: pointer;">@p.Position</td>
+                @* <td>@p.DateOfBirth.ToString("dd/MM/yyyy")</td> *@
+                <td onclick="window.location.href='@Url.Action("Detail", "Players", new { id = @p.PlayerId })'" style="cursor: pointer;">
+                    @p.Age
+                </td>
+                <td onclick="window.location.href='@Url.Action("Detail", "Players", new { id = @p.PlayerId })'" style="cursor: pointer;">@p.Team?.Name</td>
+                <td onclick="window.location.href='@Url.Action("Detail", "Players", new { id = @p.PlayerId })'" style="cursor: pointer;">@p.Nationality</td>
+                <td>
+                    <img src="@p.PhotoUrl" width="50" />
+                </td>
+
+                <td style="display: flex;align-items:center; justify-content:center">
+                    <a class="btn btn-danger" asp-controller="Players" asp-action="Delete" asp-route-id="@p.PlayerId">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
